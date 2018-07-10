@@ -52,7 +52,7 @@ def test_lemma_unit(list_input):
     assert 'this' in out
 
 def test_ngram_unit(list_input):
-    ngram = NgramLetterUnit()
+    ngram = TriLetterUnit()
     ngram.fit(list_input)
     out = ngram.transform(list_input)
     context = ngram.state

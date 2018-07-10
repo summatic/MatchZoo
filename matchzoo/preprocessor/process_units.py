@@ -168,7 +168,7 @@ class LemmatizationUnit(ProcessorUnit):
         return [lemmatizer.lemmatize(token, pos='v') for token in tokens]
 
 
-class NgramLetterUnit(StatefulProcessorUnit):
+class TriLetterUnit(StatefulProcessorUnit):
     """
     Process unit for n-letter generation.
 
@@ -196,13 +196,13 @@ class NgramLetterUnit(StatefulProcessorUnit):
         :return n_letters: generated n_letters.
         :return: length of n_letters, dimensionality of :DSSMModel:.
         """
-        n_letters = set()
+        n_letters = []
         for token in tokens:
             token = '#' + token + '#'
             while len(token) >= ngram:
-                n_letters.add(token[:ngram])
+                n_letters.append(token[:ngram])
                 token = token[1:]
-        return n_letters, len(n_letters)
+        return n_letters, len(list(set(n_letters)))
 
     def transform(self, tokens: list, ngram: int=3) -> list:
         """
