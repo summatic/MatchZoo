@@ -18,11 +18,11 @@ import keras
 import keras.backend as K
 from keras.models import Sequential, Model
 
-from .utils import *
-from . import inputs
-from . import metrics
-from .losses import *
-from .optimizers import *
+from matchzoo.utils import *
+from matchzoo import inputs
+from matchzoo import metrics
+from matchzoo.losses import *
+from matchzoo.optimizers import *
 
 config = tensorflow.ConfigProto()
 config.gpu_options.allow_growth = True
