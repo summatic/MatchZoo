@@ -7,9 +7,9 @@ from keras.models import Sequential, Model
 from keras.layers import *
 from keras.layers import Reshape, Embedding, Dot
 from keras.optimizers import Adam
-from model import BasicModel
-from layers.DynamicMaxPooling import *
-from utils.utility import *
+from matchzoo.models.model import BasicModel
+from matchzoo.layers.DynamicMaxPooling import *
+from matchzoo.utils.utility import *
 
 
 class MatchPyramid(BasicModel):

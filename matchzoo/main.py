@@ -18,11 +18,11 @@ import keras
 import keras.backend as K
 from keras.models import Sequential, Model
 
-from utils import *
-import inputs
-import metrics
-from losses import *
-from optimizers import *
+from .utils import *
+from . import inputs
+from . import metrics
+from .losses import *
+from .optimizers import *
 
 config = tensorflow.ConfigProto()
 config.gpu_options.allow_growth = True
@@ -42,14 +42,13 @@ def load_model(config):
         mo = model.build()
     return mo
 
-
 def train(config):
 
     print(json.dumps(config, indent=2), end='\n')
     # read basic config
     global_conf = config["global"]
     optimizer = global_conf['optimizer']
-    optimizer=optimizers.get(optimizer)
+    optimizer = optimizers.get(optimizer)
     K.set_value(optimizer.lr, global_conf['learning_rate'])
     weights_file = str(global_conf['weights_file']) + '.%d'
     display_interval = int(global_conf['display_interval'])

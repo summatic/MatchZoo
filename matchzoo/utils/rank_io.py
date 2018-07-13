@@ -2,14 +2,26 @@
 #! author: pangliang
 
 from __future__ import print_function
+import os
 import json
 import numpy as np
+
+
+# Modify filename
+def rename_filename(filename):
+    if os.path.isfile(filename):
+        return filename
+    elif filename.split('/')[0] == '.':
+        filename = filename[2:]
+    return '/home/hs/gits/MatchZoo/' + filename
 
 
 # Read Word Dict and Inverse Word Dict
 def read_word_dict(filename):
     word_dict = {}
     iword_dict = {}
+
+    filename = rename_filename(filename)
     for line in open(filename):
         line = line.strip().split()
         word_dict[int(line[1])] = line[0]
@@ -21,6 +33,7 @@ def read_word_dict(filename):
 # Read Embedding File
 def read_embedding(filename):
     embed = {}
+    filename = rename_filename(filename)
     for line in open(filename):
         line = line.strip().split()
         embed[int(line[0])] = list(map(float, line[1:]))
@@ -31,6 +44,7 @@ def read_embedding(filename):
 # Read old version data
 def read_data_old_version(filename):
     data = []
+    filename = rename_filename(filename)
     for idx, line in enumerate(open(filename)):
         line = line.strip().split()
         len1 = int(line[1])
@@ -44,6 +58,7 @@ def read_data_old_version(filename):
 # Read Relation Data
 def read_relation(filename, verbose=True):
     data = []
+    filename = rename_filename(filename)
     for line in open(filename):
         line = line.strip().split()
         data.append( (int(line[0]), line[1], line[2]) )
@@ -55,6 +70,7 @@ def read_relation(filename, verbose=True):
 # Read varied-length features without id
 def read_features_without_id(filename, verbose=True):
     features = []
+    filename = rename_filename(filename)
     for line in open(filename):
         line = line.strip().split()
         features.append(list(map(float, line)))
@@ -66,6 +82,7 @@ def read_features_without_id(filename, verbose=True):
 # Read varied-length features with id
 def read_features_with_id(filename, verbose=True):
     features = {}
+    filename = rename_filename(filename)
     for line in open(filename):
         line = line.strip().split()
         features[line[0]] = list(map(float, line))
@@ -77,6 +94,7 @@ def read_features_with_id(filename, verbose=True):
 # Read Data Dict
 def read_data(filename, word_dict = None):
     data = {}
+    filename = rename_filename(filename)
     for line in open(filename):
         line = line.strip().split()
         tid = line[0]

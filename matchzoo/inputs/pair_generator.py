@@ -5,8 +5,8 @@ from __future__ import absolute_import
 import sys
 import random
 import numpy as np
-from utils.rank_io import *
-from layers import DynamicMaxPooling
+from ..utils.rank_io import *
+from ..layers import DynamicMaxPooling
 import scipy.sparse as sp
 
 class PairBasicGenerator(object):
