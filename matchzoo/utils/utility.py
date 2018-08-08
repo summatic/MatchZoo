@@ -3,6 +3,7 @@ import os
 import sys
 import traceback
 import psutil
+sys.path.append('/home/hs/gits/MatchZoo/matchzoo/models')
 
 
 def show_layer_info(layer_name, layer_out):

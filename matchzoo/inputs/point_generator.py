@@ -10,20 +10,28 @@ from ..layers import DynamicMaxPooling
 import scipy.sparse as sp
 
 class PointGenerator(object):
-    def __init__(self, config):
+    def __init__(self, config, inference={}):
         self.__name = 'PointGenerator'
-        self.config = config
-        self.data1 = config['data1']
-        self.data2 = config['data2']
-        rel_file = config['relation_file']
-        self.rel = read_relation(filename=rel_file)
-        self.batch_size = config['batch_size']
-        self.data1_maxlen = config['text1_maxlen']
-        self.data2_maxlen = config['text2_maxlen']
-        self.fill_word = config['vocab_size'] - 1
-        self.target_mode = config['target_mode']
-        self.class_num = config['class_num']
-        self.is_train = config['phase'] == 'TRAIN'
+        self.config = config.copy()
+
+        if inference:
+            self.config['data1'] = inference['data']
+            self.config['data2'] = inference['data']
+            self.config['relation_file'] = None
+            self.rel = inference['rel']
+        else:
+            rel_file = self.config['relation_file']
+            self.rel = read_relation(filename=rel_file)
+
+        self.data1 = self.config['data1']
+        self.data2 = self.config['data2']
+        self.batch_size = self.config['batch_size']
+        self.data1_maxlen = self.config['text1_maxlen']
+        self.data2_maxlen = self.config['text2_maxlen']
+        self.fill_word = self.config['vocab_size'] - 1
+        self.target_mode = self.config['target_mode']
+        self.class_num = self.config['class_num']
+        self.is_train = self.config['phase'] == 'TRAIN'
         self.point = 0
         self.total_rel_num = len(self.rel)
         self.check_list = ['data1', 'data2', 'text1_maxlen', 'text2_maxlen', 'relation_file', 'batch_size', 'vocab_size']
@@ -79,7 +87,12 @@ class PointGenerator(object):
                 break
             X1, X1_len, X2, X2_len, Y, ID_pairs = sample
             if self.config['use_dpool']:
-                yield ({'query': X1, 'query_len': X1_len, 'doc': X2, 'doc_len': X2_len, 'dpool_index': DynamicMaxPooling.dynamic_pooling_index(X1_len, X2_len, self.config['text1_maxlen'], self.config['text2_maxlen']), 'ID':ID_pairs}, Y)
+                dp = DynamicMaxPooling.dynamic_pooling_index(X1_len, X2_len,
+                                                             self.config['text1_maxlen'],
+                                                             self.config['text2_maxlen'])
+                yield ({'query': X1, 'query_len': X1_len, 'doc': X2, 'doc_len': X2_len,
+                        'dpool_index': dp,
+                        'ID': ID_pairs}, Y)
             else:
                 yield ({'query': X1, 'query_len': X1_len, 'doc': X2, 'doc_len': X2_len, 'ID':ID_pairs}, Y)
 
